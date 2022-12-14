@@ -17,6 +17,7 @@ class TransE(Model):
 
 		self.ent_embeddings = nn.Embedding(self.ent_tot, self.dim)
 		self.rel_embeddings = nn.Embedding(self.rel_tot, self.dim)
+
 		if margin == None or epsilon == None:
 			nn.init.xavier_uniform_(self.ent_embeddings.weight.data)
 			nn.init.xavier_uniform_(self.rel_embeddings.weight.data)
@@ -67,7 +68,6 @@ class TransE(Model):
 		h = self.ent_embeddings(batch_h)
 		t = self.ent_embeddings(batch_t)
 		r = self.rel_embeddings(batch_r)
-		
 		# split according to local rank
 		score = self._calc(h ,t, r, mode)
 		if self.margin_flag:

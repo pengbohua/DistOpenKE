@@ -1,14 +1,17 @@
-import openke
+# import openke
+import torch
 from openke.config import Trainer, Tester
 from openke.module.model import TransE
 from openke.module.loss import MarginLoss
 from openke.module.strategy import NegativeSampling
 from openke.data import TrainDataLoader, TestDataLoader
 
+torch.cuda.set_device(0)
+torch.manual_seed(0)
 # dataloader for training
 train_dataloader = TrainDataLoader(
-	in_path = "./benchmarks/FB15K237/", 
-	nbatches = 500,
+	in_path = "/yinxr/liangshihao/OpenKE/benchmarks/FB15K237//", 
+	nbatches = 100,
 	threads = 8, 
 	sampling_mode = "normal", 
 	bern_flag = 1, 
@@ -17,7 +20,7 @@ train_dataloader = TrainDataLoader(
 	neg_rel = 0)
 
 # dataloader for test
-test_dataloader = TestDataLoader("./benchmarks/FB15K237/", "link")
+test_dataloader = TestDataLoader("/yinxr/liangshihao/OpenKE/benchmarks/FB15K237//", "link")
 
 # define the model
 transe = TransE(
@@ -38,9 +41,9 @@ model = NegativeSampling(
 # train the model
 trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 1000, alpha = 1.0, use_gpu = True)
 trainer.run()
-transe.save_checkpoint('./checkpoint/transe.ckpt')
+transe.save_checkpoint('/yinxr/liangshihao/OpenKE/checkpoint/transe_base_dim200.ckpt')
 
 # test the model
-transe.load_checkpoint('./checkpoint/transe.ckpt')
+transe.load_checkpoint('/yinxr/liangshihao/OpenKE/checkpoint/transe_base_dim200.ckpt')
 tester = Tester(model = transe, data_loader = test_dataloader, use_gpu = True)
 tester.run_link_prediction(type_constrain = False)
