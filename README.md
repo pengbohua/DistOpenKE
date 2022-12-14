@@ -13,9 +13,6 @@ requirements: torch >= 1.13
 1. 目前单卡和分布式精度运行效率对比diff见[飞书文档](https://modelbest.feishu.cn/sheets/shtcnHHzzydwYavxa6NpPTRikUf)
 2. 确定先切分还是后切分
 
-目前只在transe计算score（h + r = t）的时候是分布式计算，其余运算各个node上都一样。
-代码上与openke不同的只在./bmtrain_train_transe_FB15K237.py、./openke/module/models/TransE_bmt.py
-
 # OpenKE-PyTorch
 
 This repository is a subproject of THU-OpenSK, and all subprojects of THU-OpenSK are as follows.
