@@ -22,11 +22,7 @@ class parallel_normalize(torch.autograd.Function):
         inverse_l2_norm, input = ctx.saved_tensors
         outer = torch.bmm(input.unsqueeze(2), input.unsqueeze(1))
         jacobian = -1 * outer * torch.pow(inverse_l2_norm, 3).unsqueeze(2)
-        jacobian_diag = torch.zeros_like(jacobian)
-        for i in range(len(jacobian)):
-            jacobian_diag[i].fill_diagonal_(inverse_l2_norm[i].item())
-
-        jacobian += jacobian_diag
+        jacobian += torch.eye(input.size(1), device=input.device) * inverse_l2_norm.unsqueeze(1)
         output = torch.bmm(grad_output.unsqueeze(1), jacobian).squeeze()
         return output
 
